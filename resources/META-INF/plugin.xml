@@ -7,11 +7,11 @@
   <description><![CDATA[
       <b>Embedded Web Browser for IDEA</b><br/>
       <p>An embedded browser.</p>
-     <img width="300" height="163" src="https://raw.githubusercontent.com/starxg/webbrowserforidea/master/images/1.png" alt="Introduce Image" />
+     <img width="100%" height="auto" src="https://raw.githubusercontent.com/starxg/webbrowserforidea/master/images/1.png" alt="Embedded Web Browser" />
     ]]></description>
 
   <change-notes><![CDATA[
-      1. Add forward and back buttons
+      1. 兼容202+ （compatible with 202 +）
     ]]>
   </change-notes>
 
