@@ -1,29 +1,44 @@
-package com.starxg.browserfx;
+package com.github.esthergoldberg.devrantclient;
 
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.util.ui.JBUI;
-import javafx.scene.input.KeyCode;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.util.Objects;
 
-/**
- * 主面板
- * @author huangxingguang
- * @date 2019-04-21 13:53
- */
 public class Browser extends JPanel {
     private BrowserView webView;
     private JButton btnBack;
     private JButton btnForward;
-    private JTextField txtUrl;
-    private JButton btnGo;
+    private JButton btnReload;
+    MyCookieStore cookieStore;
+    CookieManager cookieManager;
+    MyCookiePolicy cookiePolicy;
 
     public Browser(BrowserView webView) {
+
+        StateService cookieStorageService = ServiceManager.getService(StateService.class);
+
+        cookieStore = Objects.requireNonNull(cookieStorageService.getState()).getCookieStoreValue();
+        cookiePolicy = new MyCookiePolicy();
+        cookieManager = new CookieManager(cookieStore, cookiePolicy);
+        CookieHandler.setDefault(cookieManager);
+
         this.webView = webView;
+/*
+        URI uri = URI.create("https://devrant.com");
+        Map<String, java.util.List<String>> headers = new LinkedHashMap<String, java.util.List<String>>();
+        headers.put("Set-Cookie", Arrays.asList("name=value"));
+        try {
+            java.net.CookieHandler.getDefault().put(uri,headers);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+*/
         this.initView();
         this.initEvent();
     }
@@ -59,24 +74,21 @@ public class Browser extends JPanel {
         gbc.gridy = 0;
         add(btnForward, gbc);
 
-        txtUrl = new JTextField();
         gbc = new GridBagConstraints();
         gbc.insets = JBUI.insets(0, 0, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 2;
         gbc.gridy = 0;
-        add(txtUrl, gbc);
-        txtUrl.setColumns(10);
 
-        btnGo = new JButton("Go");
-        btnGo.setMaximumSize(new Dimension(50, 29));
-        btnGo.setMinimumSize(new Dimension(50, 29));
-        btnGo.setPreferredSize(new Dimension(50, 29));
+        btnReload = new JButton("Reload");
+        btnReload.setMaximumSize(new Dimension(50, 29));
+        btnReload.setMinimumSize(new Dimension(50, 29));
+        btnReload.setPreferredSize(new Dimension(50, 29));
         gbc = new GridBagConstraints();
         gbc.insets = JBUI.insetsBottom(5);
         gbc.gridx = 3;
         gbc.gridy = 0;
-        add(btnGo, gbc);
+        add(btnReload, gbc);
 
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout(0, 0));
@@ -88,34 +100,40 @@ public class Browser extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 1;
         add(panel, gbc);
+
     }
 
     private void initEvent() {
-        btnGo.addActionListener(e -> webView.load(txtUrl.getText()));
+        webView.load("https://devrant.com");
         webView.urlChange(s -> {
-            this.txtUrl.setText(s);
             this.btnBack.setEnabled(webView.isPrev());
             this.btnForward.setEnabled(webView.isNext());
         });
         btnBack.addActionListener(e -> webView.back());
         btnForward.addActionListener(e -> webView.forward());
-        txtUrl.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
+        btnReload.addActionListener(e -> webView.reload());
 
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER && txtUrl.getText().trim().length() > 0) {
-                    webView.load(txtUrl.getText());
+        if (Toolkit.getDefaultToolkit().areExtraMouseButtonsEnabled() && MouseInfo.getNumberOfButtons() > 3) {
+            Toolkit.getDefaultToolkit().addAWTEventListener(event -> {
+                if (event instanceof MouseEvent) {
+                    MouseEvent mouseEvent = (MouseEvent) event;
+                    if (mouseEvent.getID() == MouseEvent.MOUSE_RELEASED && mouseEvent.getButton() > 3) {
+                        if (mouseEvent.getButton() == 4) {
+                            webView.back();
+                        }
+                        else if (mouseEvent.getButton() == 5) {
+                            webView.forward();
+                        }
+                    }
                 }
-            }
+            }, AWTEvent.MOUSE_EVENT_MASK);
+        }
 
-            @Override
-            public void keyReleased(KeyEvent e) {
-
-            }
-        });
     }
 }
+
+
+
+
+
+

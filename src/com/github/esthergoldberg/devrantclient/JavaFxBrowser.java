@@ -1,4 +1,4 @@
-package com.starxg.browserfx;
+package com.github.esthergoldberg.devrantclient;
 
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -43,6 +43,15 @@ public class JavaFxBrowser implements BrowserView {
 	@Override
 	public void load(String url) {
 		Platform.runLater(() -> webEngine.load(url));
+	}
+
+	@Override
+	public void reload() {
+		final WebHistory history = webEngine.getHistory();
+		ObservableList<WebHistory.Entry> entryList = history.getEntries();
+		int currentIndex = history.getCurrentIndex();
+		String currentURL = entryList.get(currentIndex).getUrl();
+		Platform.runLater(() -> webEngine.load(currentURL));
 	}
 
 	@Override

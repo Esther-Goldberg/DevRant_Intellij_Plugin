@@ -1,19 +1,13 @@
 <idea-plugin>
-  <id>com.starxg.browserfx</id>
-  <name>Embedded Web Browser</name>
-  <version>1.0.2</version>
-  <vendor email="591269@gmail.com" url="https://github.com/starxg/webbrowserforidea">starxg</vendor>
+  <id>com.github.esthergoldberg.devrantclient</id>
+  <name>DevRant Client</name>
+  <version>1.0</version>
+  <vendor email="pythontest49@gmail.com" url="https://github.com/Esther-Goldberg/devRant-intellij-plugin">Esther-Goldberg</vendor>
 
   <description><![CDATA[
-      <b>Embedded Web Browser for IDEA</b><br/>
-      <p>An embedded browser.</p>
-     <img width="300" height="163" src="https://raw.githubusercontent.com/starxg/webbrowserforidea/master/images/1.png" alt="Introduce Image" />
-    ]]></description>
+      This plugin enables you to browse and post on DevRant from within your Intellij IDE.
 
-  <change-notes><![CDATA[
-      1. Add forward and back buttons
-    ]]>
-  </change-notes>
+    ]]></description>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
   <idea-version since-build="173.0"/>
@@ -21,12 +15,13 @@
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
        on how to target different products -->
   <!-- uncomment to enable plugin in all products -->
-  <depends>com.intellij.modules.lang</depends>
+  <depends>com.intellij.modules.platform</depends>
 
 
   <extensions defaultExtensionNs="com.intellij">
     <!-- Add your extensions here -->
-    <toolWindow id="Embedded Web Browser" anchor="right" factoryClass="com.starxg.browserfx.BrowserWindowFactory"/>
+    <toolWindow id="DevRant" anchor="right" factoryClass="com.github.esthergoldberg.devrantclient.BrowserWindowFactory" icon="PluginIcons.devRantIcon"/>
+    <applicationService serviceImplementation="com.github.esthergoldberg.devrantclient.StateService"/>
   </extensions>
 
   <application-components>
