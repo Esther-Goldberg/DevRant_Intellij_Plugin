@@ -1,10 +1,6 @@
-# Embedded Web Browser for IDEA
+<h1>Devrant Intellij Plugin</h1>
 
-插件地址: https://plugins.jetbrains.com/plugin/12282-embedded-web-browser
+<p>This plugin allows you to browse devrant.com from inside your Intellij IDE. </p>
+<p>It is currently functional, but not fully feature-complete. </p>
 
-![Image text](https://raw.githubusercontent.com/starxg/webbrowserforidea/master/images/1.png)
-![Image text](https://raw.githubusercontent.com/starxg/webbrowserforidea/master/images/2.png)
----
-该项目参考了以下项目:
-
-webbrowser4idea：https://github.com/chocotan/webbrowser4idea
+<img src="Capture.PNG"/>
